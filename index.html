@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="assets\style.css">
+    <script src="assets\javascript.js" defer></script> <!-- Add 'defer' to ensure the script is loaded after the DOM -->
+</head>
+
+<body>
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <nav>
+            <h2>Search for a City:</h2>
+            <form id="city-search-form">
+                <input type="text" id="city-search" name="city" placeholder="Enter city name">
+                <button type="submit">Search</button>
+            </form>
+            <hr>
+            <ul>
+                <li><a href="#">Option 1</a></li>
+                <li><a href="#">Option 2</a></li>
+                <li><a href="#">Option 3</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <h2>Info</h2>
+            <div class="task-card">
+                <h3>Chosen city</h3>
+                <div id="city-details"> <!-- Added an element to display city details -->
+                    <p id="city-name">City Name</p> <!-- Added an element to display city name -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

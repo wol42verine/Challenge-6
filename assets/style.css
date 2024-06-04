@@ -1,0 +1,66 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #7858eb;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+nav {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 1em;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+main {
+    flex: 1;
+    padding: 1em;
+    background-color: #f9f9f9;
+}
+
+.task-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#city-search-form {
+    margin-top: 1em;
+}
+
+#city-search {
+    width: calc(100% -22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid color(rgb(8, 8, 134));
+    border-radius: 4px;
+}
+
+#city-search-form button {
+    padding: 10px 15px;
+    background-color: blue;
+    color: #ddd;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#city-search-form button:hover {
+    background-color: aqua;
+}
