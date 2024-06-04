@@ -22,19 +22,23 @@
                 <button type="submit">Search</button>
             </form>
             <hr>
+            <!-- Todo: Store city names in local storage -->
             <ul>
-                <li><a href="#">Option 1</a></li>
-                <li><a href="#">Option 2</a></li>
-                <li><a href="#">Option 3</a></li>
+                <li><a href="#">Placeholder 1</a></li>
             </ul>
         </nav>
 
         <main>
-            <h2>Info</h2>
-            <div class="task-card">
+            <h2>Current Weather</h2>
+            <div class="task-card" id="current-weather-card">
                 <h3>Chosen city</h3>
-                <div id="city-details"> <!-- Added an element to display city details -->
-                    <p id="city-name">City Name</p> <!-- Added an element to display city name -->
+                <div id="city-details">
+                    <p id="city-name">City Name</p>
+                </div>
+            </div>
+            <h2>5-Day Forecast</h2>
+            <div class="forecast-container" id="forecast-container">
+                <!-- 5-day forecast information will be displayed here -->
                 </div>
             </div>
         </main>
