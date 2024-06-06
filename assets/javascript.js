@@ -133,6 +133,7 @@ function displayWeather(data) {
     const currentWeatherCard = document.getElementById('current-weather-card');
     if (currentWeatherCard) {
         const cityName = data.name;
+        const date = new Date(data.dt * 1000).toLocaleDateString('en-US'); // Convert timestamp to date string
         const temperature = data.main.temp;
         const weather = data.weather[0].description;
         const iconCode = data.weather[0].icon; // Weather icon code
@@ -141,7 +142,7 @@ function displayWeather(data) {
         const windSpeed = data.wind.speed;
 
         currentWeatherCard.innerHTML = `
-            <h3>${cityName}</h3>
+            <h3>${cityName} (${date})</h3> <!-- Display city name and date --></h3>
             <img src="${iconUrl}" alt="${weather}">
             <p>Temperature: ${temperature} °C</p>
             <p>Weather: ${weather}</p>
