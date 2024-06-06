@@ -45,7 +45,7 @@ function getCoordinates(city) {
 
 // Function to get weather data using latitude and longitude coordinates
 function getWeather(latitude, longitude) {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial`;
 
     return fetch(apiUrl)
         .then(response => {
@@ -78,38 +78,31 @@ function displayForecast(forecastData) {
         // Filter forecast data 
         const filteredForecast = filterForecastForNoon(forecastData.list);
 
-        // Iterate through filtered forecast data and create a card for each day
-        for (const [date, forecasts] of Object.entries(filteredForecast)) {
-            const forecastCard = document.createElement('div');
-            forecastCard.classList.add('forecast-card');
-            forecastCard.innerHTML = `<h3>${date}</h3>`;
-            forecasts.forEach(forecast => {
-                const time = new Date(forecast.dt * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-                const temperature = forecast.main?.temp; // Use optional chaining to handle undefined properties
-                const weather = forecast.weather[0]?.description; // Use optional chaining to handle undefined properties
-                const iconCode = forecast.weather[0]?.icon; // Weather icon code
-                const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
-                const windSpeed = forecast.wind?.speed; // New property
-                const humidity = forecast.main?.humidity; // New property
-                if (temperature !== undefined && weather !== undefined && windSpeed !== undefined && humidity !== undefined) {
-                    const forecastItem = document.createElement('div');
-                    forecastItem.classList.add('forecast-item');
-                    forecastItem.innerHTML = `
-                        <p>${time}</p>
-                        <img src="${iconUrl}" alt="${weather}">
-                        <p>Temperature: ${temperature} °C</p>
-                        <p>Weather: ${weather}</p>
-                        <p>Wind: ${windSpeed} m/s</p>
-                        <p>Humidity: ${humidity}%</p>
-                    `;
-                    forecastCard.appendChild(forecastItem);
-                }
-            });
-            forecastContainer.appendChild(forecastCard);
+ // Iterate through filtered forecast data and create a card for each day
+ for (const [date, forecasts] of Object.entries(filteredForecast)) {
+    const forecastCard = document.createElement('div');
+    forecastCard.classList.add('forecast-card');
+    forecastCard.innerHTML = `<h3>${date}</h3>`;
+    forecasts.forEach(forecast => {
+        const time = new Date(forecast.dt * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        const temperature = (forecast.main?.temp * 9 / 5) + 32; // Convert temperature to Fahrenheit
+        const weather = forecast.weather[0]?.description; // Use optional chaining to handle undefined properties
+        if (temperature !== undefined && weather !== undefined) {
+            const forecastItem = document.createElement('div');
+            forecastItem.classList.add('forecast-item');
+            forecastItem.innerHTML = `
+                <p>${time}</p>
+                <p>Temperature: ${temperature.toFixed(2)} °F</p> <!-- Display temperature in Fahrenheit -->
+                <p>Weather: ${weather}</p>
+            `;
+            forecastCard.appendChild(forecastItem);
         }
-    } else {
-        console.error('Forecast container not found in the DOM.');
-    }
+    });
+    forecastContainer.appendChild(forecastCard);
+}
+} else {
+console.error('Forecast container not found in the DOM.');
+}
 }
 
 // Function to filter forecast data 
@@ -135,6 +128,7 @@ function displayWeather(data) {
         const cityName = data.name;
         const date = new Date(data.dt * 1000).toLocaleDateString('en-US'); // Convert timestamp to date string
         const temperature = data.main.temp;
+        const temperatureFahrenheit = (temperature * 9/5)+32; //convert to Fahrenheit
         const weather = data.weather[0].description;
         const iconCode = data.weather[0].icon; // Weather icon code
         const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
@@ -144,7 +138,7 @@ function displayWeather(data) {
         currentWeatherCard.innerHTML = `
             <h3>${cityName} (${date})</h3> <!-- Display city name and date --></h3>
             <img src="${iconUrl}" alt="${weather}">
-            <p>Temperature: ${temperature} °C</p>
+            <p>Temperature: ${temperatureFahrenheit.toFixed(2)} °F</p> //display in Fahrhenheit
             <p>Weather: ${weather}</p>
             <p>Humidity: ${humidity}%</p>
             <p>Wind: ${windSpeed} m/s</p>
