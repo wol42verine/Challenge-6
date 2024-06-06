@@ -128,7 +128,6 @@ function displayWeather(data) {
         const cityName = data.name;
         const date = new Date(data.dt * 1000).toLocaleDateString('en-US'); // Convert timestamp to date string
         const temperature = data.main.temp;
-        const temperatureFahrenheit = (temperature * 9/5)+32; //convert to Fahrenheit
         const weather = data.weather[0].description;
         const iconCode = data.weather[0].icon; // Weather icon code
         const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
@@ -136,9 +135,9 @@ function displayWeather(data) {
         const windSpeed = data.wind.speed;
 
         currentWeatherCard.innerHTML = `
-            <h3>${cityName} (${date})</h3> <!-- Display city name and date --></h3>
+            <h3>${cityName} (${date})</h3> <!-- Display city name and date -->
             <img src="${iconUrl}" alt="${weather}">
-            <p>Temperature: ${temperatureFahrenheit.toFixed(2)} °F</p> //display in Fahrhenheit
+            <p>Temperature: ${temperature} °F</p> <!-- Display temperature in Fahrenheit -->
             <p>Weather: ${weather}</p>
             <p>Humidity: ${humidity}%</p>
             <p>Wind: ${windSpeed} m/s</p>
@@ -147,6 +146,7 @@ function displayWeather(data) {
         console.error('Current weather card not found in the DOM');
     }
 }
+
 
 // Function to save city to localStorage
 function saveCity(city) {
