@@ -58,7 +58,7 @@ function getWeather(latitude, longitude) {
 
 // Function to get 5-day forecast data using latitude and longitude coordinates
 function getForecast(latitude, longitude) {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial`; // Change to imperial for Fahrenheit
 
     return fetch(apiUrl)
         .then(response => {
@@ -78,31 +78,39 @@ function displayForecast(forecastData) {
         // Filter forecast data 
         const filteredForecast = filterForecastForNoon(forecastData.list);
 
- // Iterate through filtered forecast data and create a card for each day
- for (const [date, forecasts] of Object.entries(filteredForecast)) {
-    const forecastCard = document.createElement('div');
-    forecastCard.classList.add('forecast-card');
-    forecastCard.innerHTML = `<h3>${date}</h3>`;
-    forecasts.forEach(forecast => {
-        const time = new Date(forecast.dt * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-        const temperature = (forecast.main?.temp * 9 / 5) + 32; // Convert temperature to Fahrenheit
-        const weather = forecast.weather[0]?.description; // Use optional chaining to handle undefined properties
-        if (temperature !== undefined && weather !== undefined) {
-            const forecastItem = document.createElement('div');
-            forecastItem.classList.add('forecast-item');
-            forecastItem.innerHTML = `
-                <p>${time}</p>
-                <p>Temperature: ${temperature.toFixed(2)} °F</p> <!-- Display temperature in Fahrenheit -->
-                <p>Weather: ${weather}</p>
-            `;
-            forecastCard.appendChild(forecastItem);
+        // Iterate through filtered forecast data and create a card for each day
+        for (const [date, forecasts] of Object.entries(filteredForecast)) {
+            const forecastCard = document.createElement('div');
+            forecastCard.classList.add('forecast-card');
+            forecastCard.innerHTML = `<h3>${date}</h3>`;
+            forecasts.forEach(forecast => {
+                const time = new Date(forecast.dt * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                const temperature = forecast.main?.temp; // Temperature in Fahrenheit
+                const weather = forecast.weather[0]?.description; // Use optional chaining to handle undefined properties
+                const iconCode = forecast.weather[0]?.icon; // Weather icon code
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
+                const humidity = forecast.main?.humidity; // Humidity
+                const windSpeed = forecast.wind?.speed; // Wind speed
+
+                if (temperature !== undefined && weather !== undefined && humidity !== undefined && windSpeed !== undefined) {
+                    const forecastItem = document.createElement('div');
+                    forecastItem.classList.add('forecast-item');
+                    forecastItem.innerHTML = `
+                        <p>${time}</p>
+                        <img src="${iconUrl}" alt="${weather}">
+                        <p>Temperature: ${temperature} °F</p> <!-- Display temperature in Fahrenheit -->
+                        <p>Weather: ${weather}</p>
+                        <p>Humidity: ${humidity}%</p>
+                        <p>Wind: ${windSpeed} mph</p>
+                    `;
+                    forecastCard.appendChild(forecastItem);
+                }
+            });
+            forecastContainer.appendChild(forecastCard);
         }
-    });
-    forecastContainer.appendChild(forecastCard);
-}
-} else {
-console.error('Forecast container not found in the DOM.');
-}
+    } else {
+        console.error('Forecast container not found in the DOM.');
+    }
 }
 
 // Function to filter forecast data 
@@ -130,7 +138,7 @@ function displayWeather(data) {
         const temperature = data.main.temp;
         const weather = data.weather[0].description;
         const iconCode = data.weather[0].icon; // Weather icon code
-        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`; // Weather icon URL
         const humidity = data.main.humidity;
         const windSpeed = data.wind.speed;
 
@@ -140,13 +148,12 @@ function displayWeather(data) {
             <p>Temperature: ${temperature} °F</p> <!-- Display temperature in Fahrenheit -->
             <p>Weather: ${weather}</p>
             <p>Humidity: ${humidity}%</p>
-            <p>Wind: ${windSpeed} m/s</p>
+            <p>Wind: ${windSpeed} mph</p>
         `;
     } else {
         console.error('Current weather card not found in the DOM');
     }
 }
-
 
 // Function to save city to localStorage
 function saveCity(city) {
@@ -166,6 +173,7 @@ function displaySavedCities() {
     cities.forEach(city => {
         const cityButton = document.createElement('button'); // Create a button element
         cityButton.textContent = city; // Set the button text content to the city name
+        cityButton.classList.add('city-button'); // Add class to style the button
         cityButton.addEventListener('click', function () {
             document.getElementById('city-search').value = city;
             document.getElementById('city-search-form').dispatchEvent(new Event('submit'));
@@ -175,4 +183,4 @@ function displaySavedCities() {
 }
 
 // Display saved cities on page load
-window.addEventListener('load', displaySavedCities); // New event listener
+window.addEventListener('load', displaySavedCities);
